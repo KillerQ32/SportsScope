@@ -2,21 +2,6 @@ import requests
 import pandas as pd
 
 
-# url = "https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamSchedule"
-
-# querystring = {"teamAbv":"PHI","season":"2025"}
-
-# headers = {
-# 	"x-rapidapi-key": "e4d9ccd164msh48d5a320d67f4e5p149cccjsn86edee235fb3",
-# 	"x-rapidapi-host": "tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com"
-# }
-
-# response = requests.get(url, headers=headers, params=querystring)
-
-# print(response.json())
-
-# response.json()["body"]["schedule"][0]
-
 def get_team_schedule(team: str, year: str) -> pd.DataFrame:
 
     """
@@ -30,49 +15,80 @@ def get_team_schedule(team: str, year: str) -> pd.DataFrame:
     returns:
         pandas DataFrame object. 
     """
-
+    
     url = "https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamSchedule"
 
-    querystring = {f"teamAbv":team,"season":year}
+    querystring = {"teamAbv":team,"season":year}
 
     headers = {
-	"x-rapidapi-key": "e4d9ccd164msh48d5a320d67f4e5p149cccjsn86edee235fb3",
-	"x-rapidapi-host": "tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com"
-    }
+        "x-rapidapi-key": "e4d9ccd164msh48d5a320d67f4e5p149cccjsn86edee235fb3",
+        "x-rapidapi-host": "tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com"
+        }
+    try:
+        response = requests.get(url,headers=headers,params=querystring)
+        data = response.json()
 
-    response = requests.get(url,headers=headers,params=querystring)
-    data = response.json()
+        if "body" not in data or "schedule" not in data["body"]:
+            raise ValueError("Missing expected keys in API response.")
+
+        # parse through json data to grab seasonType, gameTime, and gameWeek
+        def parse_game_schedule():
+            game_data = []
+
+            for item in data["body"]["schedule"]:
+                game_dict = {"season_type": item["seasonType"],
+                        "game_time": item["gameTime"],
+                        "game_week": item["gameWeek"]}
+                game_data.append(game_dict)
+            return game_data
+
+        # takes the parsed dictionary and throws it into a dataframe
+        # returns a dataframe containing data from dictionary 
+        game_data = parse_game_schedule()
+        team_schedule_df = pd.DataFrame(game_data)
+        return team_schedule_df
+    
+    
+    except requests.RequestException as e:
+        raise ConnectionError(f"Request failed: {e}")
+    
+    except ValueError as e:
+        raise ValueError(f"Data format error: {e}")
+    
+    except Exception as e:
+        raise Exception(f"Unexpected error: {e}")
 
 
-    # parse through json data to grab seasonType, gameTime, and gameWeek
-    def parse_game_schedule():
-        game_data = []
+def league_schedule_df_creator():
+    """
+    creates dataframes for the whole leagues schedules 
+    
+    args: NONE
+    
+    returns: a dictonary full of dataframes with 
+    the key being the name of the team 
+    """
 
-        for item in data["body"]["schedule"]:
-            game_dict = {"season_type": item["seasonType"],
-                    "game_time": item["gameTime"],
-                    "game_week": item["gameWeek"]}
-            game_data.append(game_dict)
-        return game_data
-
-    # takes the parsed dictionary and throws it into a dataframe
-    # returns a dataframe containing data from dictionary 
-    game_data = parse_game_schedule()
-    team_schedule_df = pd.DataFrame(game_data)
-    return team_schedule_df
-
-
-
-new_england_games = get_team_schedule("NE","2025")
-steelers_games = get_team_schedule("PIT","2025")
-
-
-def leauge_schedule_df_creator():
-
-    teams = ["PHI","BAL","CIN","BUF" ]
+    teams = ["ARI", "ATL", "BAL", "BUF","CAR", 
+             "CHI", "CIN", "CLE",
+             "DAL", "DEN", "DET",
+             "GB", "HOU", "IND", 
+             "JAX","KC", "MIA",
+             "MIN", "NE", "NO", 
+             "NYG", "NYJ", "LV",
+             "PHI","PIT", "LAC", 
+             "SF","SEA", "LAR", 
+             "TB", "TEN", "WSH"]
 
     game_schedule = {}
 
     for team in teams:
-        game_schedule[team] = get_team_schedule(team=team, year="2025")
+        try:
+            game_schedule[team] = get_team_schedule(team=team, year="2025")
+        except Exception as e:
+            print(f"Error retrieving schedule for team {team}: {e}")
+    return game_schedule
+        
+
+test = league_schedule_df_creator()
 
