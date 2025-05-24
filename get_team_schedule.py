@@ -36,10 +36,10 @@ def get_team_schedule(team: str, year: str) -> pd.DataFrame:
             game_data = []
 
             for item in data["body"]["schedule"]:
-                game_dict = {"season_type": item["seasonType"],
-                        "game_time": item["gameTime"],
-                        "game_week": item["gameWeek"],
-                        "game_ID": item["gameID"]}
+                game_dict = {"season_type": item.get("seasonType"),
+                        "game_time": item.get("gameTime"),  # get() instead of ["*"] for safe access
+                        "game_week": item.get("gameWeek"),
+                        "game_ID": item.get("gameID")}
                 game_data.append(game_dict)
             return game_data
 
