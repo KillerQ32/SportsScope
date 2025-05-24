@@ -89,6 +89,6 @@ def league_schedule_df_creator():
             print(f"Error retrieving schedule for team {team}: {e}")
     return game_schedule
         
-
-test = league_schedule_df_creator()
+if __name__ == "__main__":
+    test = league_schedule_df_creator()
 
