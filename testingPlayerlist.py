@@ -26,6 +26,7 @@ def create_player_list_dataframe():
             "weight": player.get("weight"),
             "height": player.get("height"),
             "position": player.get("pos"),
+            "College": player.get("school"),
             "team_ID": player.get("teamID"),
             "player_ID": player.get("playerID"),
             "espn_ID": player.get("espnID"),
