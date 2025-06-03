@@ -2,37 +2,39 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-url = "https://www.pro-football-reference.com/years/2024/rushing.htm"
-headers = {"User-Agent": "Mozilla/5.0"}
 
-response = requests.get(url, headers=headers)
-soup = BeautifulSoup(response.text, "html.parser")
+def create_df_2024():
+    url = "https://www.pro-football-reference.com/years/2024/rushing.htm"
+    headers = {"User-Agent": "Mozilla/5.0"}
 
-# Get table and headers
-table = soup.find("table", id="rushing")
-header_row = table.find("thead").find_all("tr")[-1]
-headers = [th.text.strip() for th in header_row.find_all("th")]
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.text, "html.parser")
 
-# Find all table rows inside tbody
-rows = table.find("tbody").find_all("tr")
+    # Get table and headers
+    table = soup.find("table", id="rushing")
+    header_row = table.find("thead").find_all("tr")[-1]
+    headers = [th.text.strip() for th in header_row.find_all("th")]
 
-rb_stats_list = []
+    # Find all table rows inside tbody
+    rows = table.find("tbody").find_all("tr")
 
-for row in rows:
-    if row.get("class") == ["thead"]:
-        continue  # skip duplicate header rows
+    rb_stats_list = []
 
-    cols = row.find_all(["th", "td"])
-    values = [col.text.strip() for col in cols]
+    for row in rows:
+        if row.get("class") == ["thead"]:
+            continue  # skip duplicate header rows
 
-    if len(values) != len(headers):
-        continue
+        cols = row.find_all(["th", "td"])
+        values = [col.text.strip() for col in cols]
 
-    player_stats = dict(zip(headers, values))
-    rb_stats_list.append(player_stats)
+        if len(values) != len(headers):
+            continue
 
-# Convert to DataFrame
-rb_stats_2024_df = pd.DataFrame(rb_stats_list)
+        player_stats = dict(zip(headers, values))
+        rb_stats_list.append(player_stats)
 
-# Preview
-print(rb_stats_2024_df)
+    # Convert to DataFrame
+    rb_stats_2024_df = pd.DataFrame(rb_stats_list)
+    rb_stats_2024_df.set_index("Rk",inplace=True)
+
+    return rb_stats_2024_df
