@@ -2,40 +2,42 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-url = "https://www.pro-football-reference.com/years/2024/receiving.htm"
-headers = {"User-Agent": "Mozilla/5.0"}
 
-response = requests.get(url, headers=headers)
-soup = BeautifulSoup(response.text, "html.parser")
+def create_df_2024():
+    url = "https://www.pro-football-reference.com/years/2024/receiving.htm"
+    headers = {"User-Agent": "Mozilla/5.0"}
 
-# Locate the receiving stats table
-table = soup.find("table", id="receiving")
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.text, "html.parser")
 
-# Get the final header row (sometimes there are multiple <tr>s in <thead>)
-header_row = table.find("thead").find_all("tr")[-1]
-headers = [th.text.strip() for th in header_row.find_all("th")]
+    # Locate the receiving stats table
+    table = soup.find("table", id="receiving")
 
-# Get all player rows in <tbody>
-rows = table.find("tbody").find_all("tr")
+    # Get the final header row (sometimes there are multiple <tr>s in <thead>)
+    header_row = table.find("thead").find_all("tr")[-1]
+    headers = [th.text.strip() for th in header_row.find_all("th")]
 
-receiving_stats_list = []
+    # Get all player rows in <tbody>
+    rows = table.find("tbody").find_all("tr")
 
-for row in rows:
-    if row.get("class") == ["thead"]:
-        continue  # Skip embedded header rows inside <tbody>
+    receiving_stats_list = []
 
-    cols = row.find_all(["th", "td"])
-    values = [col.text.strip() for col in cols]
+    for row in rows:
+        if row.get("class") == ["thead"]:
+            continue  # Skip embedded header rows inside <tbody>
 
-    # Skip rows that don’t match the number of headers
-    if len(values) != len(headers):
-        continue
+        cols = row.find_all(["th", "td"])
+        values = [col.text.strip() for col in cols]
 
-    player_stats = dict(zip(headers, values))
-    receiving_stats_list.append(player_stats)
+        # Skip rows that don’t match the number of headers
+        if len(values) != len(headers):
+            continue
 
-# Convert to DataFrame
-receiving_df = pd.DataFrame(receiving_stats_list)
+        player_stats = dict(zip(headers, values))
+        receiving_stats_list.append(player_stats)
 
-# Preview first few rows
-print(receiving_df)
+    # Convert to DataFrame
+    receiving_stats_df = pd.DataFrame(receiving_stats_list)
+    receiving_stats_df.set_index("Rk",inplace=True)
+
+    return receiving_stats_df

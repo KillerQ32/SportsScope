@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
+
 def create_df_2023():
     url = "https://www.pro-football-reference.com/years/2023/rushing.htm"
     headers = {"User-Agent": "Mozilla/5.0"}
@@ -33,7 +34,7 @@ def create_df_2023():
         rb_stats_list.append(player_stats)
 
     # Convert to DataFrame
-    rb_stats_2023_df = pd.DataFrame(rb_stats_list)
-    rb_stats_2023_df.set_index("Rk",inplace=True)
+    rushing_stats_2023_df = pd.DataFrame(rb_stats_list)
+    rushing_stats_2023_df.set_index("Rk",inplace=True)
 
-    return rb_stats_2023_df
+    return rushing_stats_2023_df

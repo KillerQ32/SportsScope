@@ -34,7 +34,7 @@ def create_df_2024():
         rb_stats_list.append(player_stats)
 
     # Convert to DataFrame
-    rb_stats_2024_df = pd.DataFrame(rb_stats_list)
-    rb_stats_2024_df.set_index("Rk",inplace=True)
+    rushing_stats_2024_df = pd.DataFrame(rb_stats_list)
+    rushing_stats_2024_df.set_index("Rk",inplace=True)
 
-    return rb_stats_2024_df
+    return rushing_stats_2024_df
