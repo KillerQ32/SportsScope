@@ -2,39 +2,41 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-url = "https://www.pro-football-reference.com/years/2022/passing.htm"
-headers = {"User-Agent": "Mozilla/5.0"}
 
-response = requests.get(url, headers=headers)
-soup = BeautifulSoup(response.text, "html.parser")
+def create_df_2022():
+    url = "https://www.pro-football-reference.com/years/2022/passing.htm"
+    headers = {"User-Agent": "Mozilla/5.0"}
 
-# Get table and headers
-table = soup.find("table", id="passing")
-header_row = table.find("thead").find_all("tr")[-1]
-headers = [th.text.strip() for th in header_row.find_all("th")]
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.text, "html.parser")
 
-# Find all table rows inside tbody
-rows = table.find("tbody").find_all("tr")
+    # Get table and headers
+    table = soup.find("table", id="passing")
+    header_row = table.find("thead").find_all("tr")[-1]
+    headers = [th.text.strip() for th in header_row.find_all("th")]
 
-qb_stats_list = []
+    # Find all table rows inside tbody
+    rows = table.find("tbody").find_all("tr")
 
-for row in rows:
-    if row.get("class") == ["thead"]:
-        continue  # skip duplicate header rows
+    qb_stats_list = []
 
-    cols = row.find_all(["th", "td"])
-    values = [col.text.strip() for col in cols]
+    for row in rows:
+        if row.get("class") == ["thead"]:
+            continue  # skip duplicate header rows
 
-    # Skip rows that don’t match the header length
-    if len(values) != len(headers):
-        continue
+        cols = row.find_all(["th", "td"])
+        values = [col.text.strip() for col in cols]
 
-    player_stats = dict(zip(headers, values))
-    qb_stats_list.append(player_stats)
+        # Skip rows that don’t match the header length
+        if len(values) != len(headers):
+            continue
 
-# Print 3 examples
-##    print(qb)
-#    print("-" * 40)
+        player_stats = dict(zip(headers, values))
+        qb_stats_list.append(player_stats)
 
-qb_stats_2024_df = pd.DataFrame(qb_stats_list)
-print(qb_stats_2024_df)
+
+
+    qb_stats_df = pd.DataFrame(qb_stats_list)
+    qb_stats_df.set_index("Rk",inplace=True)
+
+    return qb_stats_df
