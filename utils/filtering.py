@@ -1,6 +1,10 @@
 import pandas as pd
 
 def filter_df(df: pd.DataFrame, year: int, cols: list[str]) -> pd.DataFrame:
+    """
+    checks for value greater than 0 in specified columns. applys row wise. 
+    if a player has a stat recoreded in any columns specified it keeps them.
+    """
     df = df.copy()
     # changes all columns in col to numbers if that fails it changes it to NA
     # then any NA value is turned to 0. changes all numbers to make sure its an int rather than float
@@ -11,10 +15,18 @@ def filter_df(df: pd.DataFrame, year: int, cols: list[str]) -> pd.DataFrame:
     return df
 
 def get_names_only(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
+    """
+    drops all columns specified in the arguements
+    used to get only player name and position 
+    """
     df = df.drop(cols, axis=1)
     return df
 
 def combine_df(dfs: list[pd.DataFrame]) -> pd.DataFrame:
+    """
+    returns concatenated df with all duplicate names dropped
+    this allows only one player to show up. Ex: DH 
+    """
     df = pd.concat(dfs, axis=0)
     df = df.drop_duplicates()
     return df
