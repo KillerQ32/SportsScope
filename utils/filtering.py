@@ -16,7 +16,7 @@ def filter_df(df: pd.DataFrame, year: int, cols: list[str]) -> pd.DataFrame:
 
 def get_names_only(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
     """
-    drops all columns specified in the arguements
+    drops all columns specified in the arguements.
     used to get only player name and position 
     """
     df = df.drop(cols, axis=1)
@@ -25,7 +25,9 @@ def get_names_only(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
 def combine_df(dfs: list[pd.DataFrame]) -> pd.DataFrame:
     """
     returns concatenated df with all duplicate names dropped
-    this allows only one player to show up. Ex: DH 
+    this allows only one copy of a player to show up.
+    EX: if there are two "lamar jackson's" they will show up as 2 different people,
+    as long as thier position is not the same. this allows for same name players to both exist 
     """
     df = pd.concat(dfs, axis=0)
     df = df.drop_duplicates()
