@@ -24,10 +24,10 @@ def strip_columns(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
 
 def combine_df(dfs: list[pd.DataFrame]) -> pd.DataFrame:
     """
-    returns concatenated df with all duplicate names dropped
+    returns concatenated df with all duplicates dropped
     this allows only one copy of a player to show up.
     EX: if there are two "lamar jackson's" they will show up as 2 different people,
-    as long as thier position is not the same. this allows for same name players to both exist 
+    as long as one column is different. this allows for same name players to both exist 
     """
     df = pd.concat(dfs, axis=0)
     df = df.drop_duplicates()
