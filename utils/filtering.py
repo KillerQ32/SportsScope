@@ -14,9 +14,9 @@ def filter_df(df: pd.DataFrame, year: int, cols: list[str]) -> pd.DataFrame:
     df["Year"] = year
     return df
 
-def get_names_only(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
+def strip_columns(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
     """
-    drops all columns specified in the arguements.
+    drops all columns specified in the arguments.
     used to get only player name and position 
     """
     df = df.drop(cols, axis=1)
