@@ -1,5 +1,14 @@
 import requests
 import pandas as pd
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+X_API_BASE_URL = os.getenv("X_API_BASE_URL")
+X_API_KEY = os.getenv("X_API_KEY")
+X_API_HOST = os.getenv("X_API_HOST")
+
 
 
 def get_team_schedule(team: str, year: str) -> pd.DataFrame:
@@ -16,13 +25,13 @@ def get_team_schedule(team: str, year: str) -> pd.DataFrame:
         pandas DataFrame object. 
     """
     
-    url = "https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeamSchedule"
+    url = f"{X_API_BASE_URL}getNFLTeamSchedule"
 
     querystring = {"teamAbv":team,"season":year}
 
     headers = {
-        "x-rapidapi-key": "e4d9ccd164msh48d5a320d67f4e5p149cccjsn86edee235fb3",
-        "x-rapidapi-host": "tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com"
+        "x-rapidapi-key": X_API_KEY,
+        "x-rapidapi-host": X_API_HOST
         }
     try:
         response = requests.get(url,headers=headers,params=querystring)
@@ -92,4 +101,3 @@ def league_schedule_df_creator():
         
 if __name__ == "__main__":
     test = league_schedule_df_creator()
-
