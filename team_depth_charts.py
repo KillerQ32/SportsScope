@@ -1,11 +1,19 @@
 import requests
 import pandas as pd
+import os
+from dotenv import load_dotenv
 
-url = "https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLDepthCharts"
+load_dotenv()
+
+X_API_BASE_URL = os.getenv("X_API_BASE_URL")
+X_API_KEY = os.getenv("X_API_KEY")
+X_API_HOST = os.getenv("X_API_HOST")
+
+url = f"{X_API_BASE_URL}/getNFLDepthCharts"
 
 headers = {
-	"x-rapidapi-key": "ed5b5763f5msh60a32b281315712p165ec7jsne408d86bb9b9",
-	"x-rapidapi-host": "tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com"
+	"x-rapidapi-key": X_API_KEY,
+	"x-rapidapi-host": X_API_HOST
 }
 
 response = requests.get(url, headers=headers)

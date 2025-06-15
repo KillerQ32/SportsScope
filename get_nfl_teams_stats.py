@@ -1,8 +1,16 @@
 import requests
 import pandas as pd
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+X_API_BASE_URL = os.getenv("X_API_BASE_URL")
+X_API_KEY = os.getenv("X_API_KEY")
+X_API_HOST = os.getenv("X_API_HOST")
 
 def get_nfl_single_player_team_stats_dataframe(year="2024") -> pd.DataFrame:
-    url = "https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeams"
+    url = f"{X_API_BASE_URL}/getNFLTeams"
     querystring = {
         "sortBy": "standings",
         "rosters": "false",
@@ -13,8 +21,8 @@ def get_nfl_single_player_team_stats_dataframe(year="2024") -> pd.DataFrame:
     }
 
     headers = {
-        "x-rapidapi-key": "e4d9ccd164msh48d5a320d67f4e5p149cccjsn86edee235fb3",
-        "x-rapidapi-host": "tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com"
+        "x-rapidapi-key": X_API_KEY,
+        "x-rapidapi-host": X_API_HOST
     }
 
     response = requests.get(url, headers=headers, params=querystring)
