@@ -62,31 +62,31 @@ def get_nfl_single_player_team_stats_dataframe(year="2024") -> pd.DataFrame:
             
             # Rushing leaders
             "rushYds": team["topPerformers"]["Rushing"]["rushYds"]["total"],
-            "rushYdsPlayer": team["topPerformers"]["Rushing"]["rushYds"]["playerID"][0],
+            "rushYdsPlayer": team["topPerformers"]["Rushing"]["rushYds"]["playerID"],
             "rushCarries": team["topPerformers"]["Rushing"]["carries"]["total"],
-            "rushCarriesPlayer": team["topPerformers"]["Rushing"]["carries"]["playerID"][0],
+            "rushCarriesPlayer": team["topPerformers"]["Rushing"]["carries"]["playerID"],
             "rushTDs": team["topPerformers"]["Rushing"]["rushTD"]["total"],
-            "rushTDsPlayer": team["topPerformers"]["Rushing"]["rushTD"]["playerID"][0],
+            "rushTDsPlayer": team["topPerformers"]["Rushing"]["rushTD"]["playerID"],
 
             # Passing leaders
             "passYds": team["topPerformers"]["Passing"]["passYds"]["total"],
-            "passYdsPlayer": team["topPerformers"]["Passing"]["passYds"]["playerID"][0],
+            "passYdsPlayer": team["topPerformers"]["Passing"]["passYds"]["playerID"],
             "passTDs": team["topPerformers"]["Passing"]["passTD"]["total"],
-            "passTDsPlayer": team["topPerformers"]["Passing"]["passTD"]["playerID"][0],
+            "passTDsPlayer": team["topPerformers"]["Passing"]["passTD"]["playerID"],
 
             # Defense leaders
             "totalTackles": team["topPerformers"]["Defense"]["totalTackles"]["total"],
-            "tacklesPlayer": team["topPerformers"]["Defense"]["totalTackles"]["playerID"][0],
+            "tacklesPlayer": team["topPerformers"]["Defense"]["totalTackles"]["playerID"],
             "sacks": team["topPerformers"]["Defense"]["sacks"]["total"],
-            "sacksPlayer": team["topPerformers"]["Defense"]["sacks"]["playerID"][0],
+            "sacksPlayer": team["topPerformers"]["Defense"]["sacks"]["playerID"],
             "interceptions": team["topPerformers"]["Defense"]["defensiveInterceptions"]["total"],
-            "interceptionsPlayers": team["topPerformers"]["Defense"]["defensiveInterceptions"]["playerID"][0],
+            "interceptionsPlayers": team["topPerformers"]["Defense"]["defensiveInterceptions"]["playerID"],
 
             # Receiving leaders
             "recYds": team["topPerformers"]["Receiving"]["recYds"]["total"],
-            "recYdsPlayer": team["topPerformers"]["Receiving"]["recYds"]["playerID"][0],
+            "recYdsPlayer": team["topPerformers"]["Receiving"]["recYds"]["playerID"],
             "recTDs": team["topPerformers"]["Receiving"]["recTD"]["total"],
-            "recTDsPlayer": team["topPerformers"]["Receiving"]["recTD"]["playerID"][0]
+            "recTDsPlayer": team["topPerformers"]["Receiving"]["recTD"]["playerID"]
         }
         all_teams_data.append(team_data)
 
