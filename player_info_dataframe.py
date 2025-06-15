@@ -3,33 +3,45 @@ import pandas as pd
 import os
 from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv()
 
 X_API_BASE_URL = os.getenv("X_API_BASE_URL")
 X_API_KEY = os.getenv("X_API_KEY")
 X_API_HOST = os.getenv("X_API_HOST")
 
-url = f"{X_API_BASE_URL}/getNFLPlayerInfo"
+def get_player_info(player_name: str) -> dict:
+    """
+    Retrieve player info from the API based on player name.
 
-querystring = {"playerName":"keenan_a","getStats":"true"}
+    Args:
+        player_name (str): Player name formatted for the API query
 
-headers = {
-	"x-rapidapi-key": X_API_KEY,
-	"x-rapidapi-host": X_API_HOST
-}
+    Returns:
+        dict: Raw JSON response from the API
+    """
+    url = f"{X_API_BASE_URL}/getNFLPlayerInfo"
+    querystring = {"playerName": player_name, "getStats": "true"}
+    headers = {
+        "x-rapidapi-key": X_API_KEY,
+        "x-rapidapi-host": X_API_HOST
+    }
+    response = requests.get(url, headers=headers, params=querystring)
+    return response.json()
 
-response = requests.get(url, headers=headers, params=querystring)
+def parse_player_info(json_data: dict) -> pd.DataFrame:
+    """
+    Parse player info JSON response into pandas DataFrame.
 
-#print(response.json())
-"""
-Function retrieves player information and creates dataframe
-"""
-def get_player_info_dataframe():
-    player_info = [] #declare player info list
+    Args:
+        json_data (dict): Raw JSON API response
 
-    data = response.json() #refernce json request
+    Returns:
+        pd.DataFrame: DataFrame containing player info
+    """
+    player_info = []
 
-    for player in data["body"]: #Looping body
+    for player in json_data.get("body", []):
         player_info_dict = {
             "espn_name": player.get("espnName"),
             "stats": player.get("stats"),
@@ -37,11 +49,27 @@ def get_player_info_dataframe():
         }
         player_info.append(player_info_dict)
 
-    df = pd.DataFrame(player_info)
-    return df
+    return pd.DataFrame(player_info)
+
+def get_player_info_dataframe(player_name: str) -> pd.DataFrame:
+    """
+    Full pipeline to retrieve and convert player info into DataFrame.
+
+    Args:
+        player_name (str): Player name for lookup
+
+    Returns:
+        pd.DataFrame: Player information as DataFrame
+    """
+    raw_data = get_player_info(player_name)
+    return parse_player_info(raw_data)
 
 def main():
-    player_information_df = get_player_info_dataframe()
+    """
+    Example usage for testing with Keenan Allen.
+    """
+    player_information_df = get_player_info_dataframe("keenan_a")
     print(player_information_df)
 
-main()
+if __name__ == "__main__":
+    main()
