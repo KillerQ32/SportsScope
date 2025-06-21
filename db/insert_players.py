@@ -4,7 +4,7 @@ from sqlalchemy import text
 def insert_into_players_table(df):
     insert_query = text("""
                         INSERT INTO players (player_name, position)
-                        VALUES(:player_name, :position)
+                        VALUES(:Player, :Pos)
                         ON CONFLICT (player_name) DO NOTHING;
                         """)
     
@@ -12,6 +12,8 @@ def insert_into_players_table(df):
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
 
+from filtered_stats_data.player_names import player_names
+insert_into_players_table(player_names)
 
 def insert_into_teams_table(df):
     insert_query = text("""
