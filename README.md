@@ -34,7 +34,7 @@ nfl-intelligence-hub/
 
 - Manual SQL schema: `players`, `teams`, `rushing_stats`, etc.
 - Used raw SQL insert functions for transparency and control.
-- Used SQLAlchemy with ORM abstraction
+- Used SQLAlchemy without ORM abstraction
 
 ### Utils Directory
 
@@ -83,9 +83,23 @@ nfl-intelligence-hub/
 - [ ] Dockerize and test multi-container stack
 - [ ] Deploy to AWS (EC2 + RDS)
 - [ ] Integrate charts and leaderboard UI
+- [ ] Integrate External APIs
+- [ ] NBA integration
+- [ ] Finish Databse
+- [ ] Create Frontend
 
 ---
 
+## Authors Documentation
+  
+  # Why we chose this Project?
+    N/A
+  # Our Approach
+    N/A
+  # Our Observations
+    N/A
+
+---
 ## Author
 
 **Quinten Ballard**  
