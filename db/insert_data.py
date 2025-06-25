@@ -29,8 +29,15 @@ from filtered_stats_data.teams import team_headers
 insert_into_teams_table(team_headers)
 
 def insert_into_rushing_table(df):
+    # Right before insert_into_rushing_table(rush_player_stats)
+    print("Lng unique values:", rush_player_stats["Lng"].unique())
+    print("Lng dtype:", rush_player_stats["Lng"].dtype)
+    print("Rows with bad Lng:")
+    print(rush_player_stats[rush_player_stats["Lng"].astype(str).str.strip() == ""])
+
     insert_query = text("""
-                        INSERT INTO rushing_stats ()
+                        INSERT INTO rushing_stats (season_year, rush_attempts, rush_yards, rush_tds, longest_rush, games_played, team_name, player_name)
+                        VALUES(:Year, :Att, :Yds, :TD, :Lng, :G, :Team, :Player)
                         """)
     
     with engine.connect() as conn:
