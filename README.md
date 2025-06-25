@@ -92,11 +92,11 @@ nfl-intelligence-hub/
 
 ## Authors Documentation
   
-  # Why we chose this Project?
+  ### Why we chose this Project?
     N/A
-  # Our Approach
+  ### Our Approach
     N/A
-  # Our Observations
+  ### Our Observations
     N/A
 
 ---
