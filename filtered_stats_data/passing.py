@@ -4,6 +4,7 @@ from Scraping.player_stats_2024.passing_stats_2024 import create_df_2024
 from utils.filtering import filter_df
 from utils.filtering import combine_df
 from utils.filtering import strip_columns
+import pandas as pd
 
 def verify_player_stats():
     passing_stats_2022 = create_df_2022()
@@ -51,6 +52,8 @@ def get_player_stats():
     pass_2024_names = strip_columns(pass_2024,removed_cols)
     
     combined_df = combine_df([pass_2022_names,pass_2023_names,pass_2024_names])
+    combined_df = combined_df.copy()
+    combined_df[["Lng", "G"]] = combined_df[["Lng", "G"]].apply(pd.to_numeric, errors="coerce").fillna(0).astype(int)
     
     return combined_df
 

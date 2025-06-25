@@ -55,13 +55,15 @@ insert_into_receiving_table(rec_player_stats)
         
 def insert_into_passing_table(df):
     insert_query = text("""
-                        INSERT INTO passing_stats ()
+                        INSERT INTO passing_stats (season_year, pass_completed, pass_attempts, pass_yards, pass_tds, pass_ints, pass_long, games_played, team_name, player_name)\
+                        VALUES(:Year, :Cmp, :Att, :Yds, :TD, :Int, :Lng, :G, :Team, :Player)
                         """)
     
     with engine.connect() as conn:
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
-
+from filtered_stats_data.passing import passing_player_stats
+insert_into_passing_table(passing_player_stats)
 
 def insert_into_kicking_table(df):
     insert_query = text("""
