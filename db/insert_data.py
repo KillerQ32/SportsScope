@@ -17,15 +17,17 @@ insert_into_players_table(player_names)
 
 def insert_into_teams_table(df):
     insert_query = text("""
-                        INSERT INTO teams (team_name, division)
-                        VALUES(:team_name, :division)
+                        INSERT INTO teams (team_name, division, conference)
+                        VALUES(:teamAbv, :division, :conference)
                         """)
     
     with engine.connect() as conn:
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
-        
-        
+    
+from filtered_stats_data.teams import team_headers
+insert_into_teams_table(team_headers)
+
 def insert_into_rushing_table(df):
     insert_query = text("""
                         INSERT INTO rushing_stats ()
@@ -35,6 +37,8 @@ def insert_into_rushing_table(df):
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
         
+from filtered_stats_data.rushing import rush_player_stats
+insert_into_rushing_table(rush_player_stats)
         
 def insert_into_receiving_table(df):
     insert_query = text("""
