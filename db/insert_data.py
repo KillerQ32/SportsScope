@@ -29,12 +29,6 @@ from filtered_stats_data.teams import team_headers
 insert_into_teams_table(team_headers)
 
 def insert_into_rushing_table(df):
-    # Right before insert_into_rushing_table(rush_player_stats)
-    print("Lng unique values:", rush_player_stats["Lng"].unique())
-    print("Lng dtype:", rush_player_stats["Lng"].dtype)
-    print("Rows with bad Lng:")
-    print(rush_player_stats[rush_player_stats["Lng"].astype(str).str.strip() == ""])
-
     insert_query = text("""
                         INSERT INTO rushing_stats (season_year, rush_attempts, rush_yards, rush_tds, longest_rush, games_played, team_name, player_name)
                         VALUES(:Year, :Att, :Yds, :TD, :Lng, :G, :Team, :Player)
@@ -49,13 +43,15 @@ insert_into_rushing_table(rush_player_stats)
         
 def insert_into_receiving_table(df):
     insert_query = text("""
-                        INSERT INTO receiving_stats ()
+                        INSERT INTO receiving_stats (season_year, targets, receptions, rec_yards, rec_tds, rec_long, games_played, team_name, player_name)
+                        VALUES(:Year, :Tgt, :Rec, :Yds, :TD, :Lng, :G, :Team, :Player)
                         """)
     
     with engine.connect() as conn:
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
-        
+from filtered_stats_data.receiving import rec_player_stats
+insert_into_receiving_table(rec_player_stats)
         
 def insert_into_passing_table(df):
     insert_query = text("""
