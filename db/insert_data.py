@@ -67,9 +67,12 @@ insert_into_passing_table(passing_player_stats)
 
 def insert_into_kicking_table(df):
     insert_query = text("""
-                        INSERT INTO kicking_stats ()
+                        INSERT INTO kicking_stats (season_year, fg_attempts, fg_made, fg_long, xp_made, xp_attempts, games_played, team_name, player_name)
+                        VALUES(:Year, :FGA, :FGM, :Lng, :XPM, :XPA, :G, :Team, :Player)
                         """)
     
     with engine.connect() as conn:
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
+from filtered_stats_data.kicking import kicking_player_stats
+insert_into_kicking_table(kicking_player_stats)
