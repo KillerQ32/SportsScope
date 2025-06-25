@@ -47,6 +47,7 @@ def get_player_stats():
     rs_2024_names = strip_columns(rs_2024, removed_cols)
 
     combined_df = combine_df([rs_2022_names,rs_2023_names,rs_2024_names])
+    combined_df = combined_df.copy()
     combined_df[["Lng", "G"]] = combined_df[["Lng", "G"]].apply(pd.to_numeric, errors="coerce").fillna(0).astype(int)
 
     return combined_df   
