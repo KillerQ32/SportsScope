@@ -92,6 +92,7 @@ nfl-intelligence-hub/
 
 ## Issues we came across
 - Issue: team_name mis-match between tables; Fix: located wrong information and updated with query
+- Issue: engine.connect() would only run one query had to swap to engine.begin() for both queries to run
  
 ---
 
