@@ -1,5 +1,12 @@
 from db.engine import engine
 from sqlalchemy import text
+from filtered_stats_data.player_names import player_names
+from filtered_stats_data.teams import team_headers
+from filtered_stats_data.rushing import rush_player_stats
+from filtered_stats_data.passing import passing_player_stats
+from filtered_stats_data.receiving import rec_player_stats
+from filtered_stats_data.kicking import kicking_player_stats
+
 
 def insert_into_players_table(df):
     insert_query = text("""
@@ -12,8 +19,9 @@ def insert_into_players_table(df):
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
 
-from filtered_stats_data.player_names import player_names
+
 insert_into_players_table(player_names)
+
 
 def insert_into_teams_table(df):
     insert_query = text("""
@@ -25,8 +33,8 @@ def insert_into_teams_table(df):
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
     
-from filtered_stats_data.teams import team_headers
 insert_into_teams_table(team_headers)
+
 
 def insert_into_rushing_table(df):
     insert_query = text("""
@@ -38,8 +46,8 @@ def insert_into_rushing_table(df):
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
         
-from filtered_stats_data.rushing import rush_player_stats
 insert_into_rushing_table(rush_player_stats)
+
         
 def insert_into_receiving_table(df):
     insert_query = text("""
@@ -50,9 +58,10 @@ def insert_into_receiving_table(df):
     with engine.connect() as conn:
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
-from filtered_stats_data.receiving import rec_player_stats
-insert_into_receiving_table(rec_player_stats)
         
+insert_into_receiving_table(rec_player_stats)
+
+      
 def insert_into_passing_table(df):
     insert_query = text("""
                         INSERT INTO passing_stats (season_year, pass_completed, pass_attempts, pass_yards, pass_tds, pass_ints, pass_long, games_played, team_name, player_name)\
@@ -62,8 +71,9 @@ def insert_into_passing_table(df):
     with engine.connect() as conn:
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
-from filtered_stats_data.passing import passing_player_stats
+        
 insert_into_passing_table(passing_player_stats)
+
 
 def insert_into_kicking_table(df):
     insert_query = text("""
@@ -74,5 +84,5 @@ def insert_into_kicking_table(df):
     with engine.connect() as conn:
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
-from filtered_stats_data.kicking import kicking_player_stats
+        
 insert_into_kicking_table(kicking_player_stats)
