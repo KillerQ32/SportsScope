@@ -20,9 +20,6 @@ def insert_into_players_table(df):
         conn.commit()
 
 
-insert_into_players_table(player_names)
-
-
 def insert_into_teams_table(df):
     insert_query = text("""
                         INSERT INTO teams (team_name, division, conference)
@@ -32,8 +29,6 @@ def insert_into_teams_table(df):
     with engine.connect() as conn:
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
-    
-insert_into_teams_table(team_headers)
 
 
 def insert_into_rushing_table(df):
@@ -46,8 +41,6 @@ def insert_into_rushing_table(df):
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
         
-insert_into_rushing_table(rush_player_stats)
-
         
 def insert_into_receiving_table(df):
     insert_query = text("""
@@ -58,8 +51,6 @@ def insert_into_receiving_table(df):
     with engine.connect() as conn:
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
-        
-insert_into_receiving_table(rec_player_stats)
 
       
 def insert_into_passing_table(df):
@@ -71,8 +62,6 @@ def insert_into_passing_table(df):
     with engine.connect() as conn:
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
-        
-insert_into_passing_table(passing_player_stats)
 
 
 def insert_into_kicking_table(df):
@@ -85,4 +74,11 @@ def insert_into_kicking_table(df):
         conn.execute(insert_query,df.to_dict(orient="records"))
         conn.commit()
         
-insert_into_kicking_table(kicking_player_stats)
+
+if __name__ == "__main__":
+    insert_into_players_table(player_names)
+    insert_into_teams_table(team_headers)
+    insert_into_rushing_table(rush_player_stats)
+    insert_into_receiving_table(rec_player_stats)
+    insert_into_passing_table(passing_player_stats)
+    insert_into_kicking_table(kicking_player_stats)

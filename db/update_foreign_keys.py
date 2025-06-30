@@ -23,7 +23,7 @@ def update_rushing_foreign_keys():
         conn.execute(update_team_id)
         conn.execute(update_player_id)
     
-update_rushing_foreign_keys()
+
 
 def update_receiving_foreign_keys():
     update_team_id = text("""
@@ -45,8 +45,7 @@ def update_receiving_foreign_keys():
     with engine.begin() as conn:
         conn.execute(update_team_id)
         conn.execute(update_player_id)
-        
-update_receiving_foreign_keys()
+
 
 def update_passing_foreign_keys():
     update_team_id = text("""
@@ -69,7 +68,7 @@ def update_passing_foreign_keys():
         conn.execute(update_team_id)
         conn.execute(update_player_id)
 
-update_passing_foreign_keys()
+
 
 def update_kicking_foreign_keys():
     update_team_id = text("""
@@ -92,4 +91,10 @@ def update_kicking_foreign_keys():
         conn.execute(update_team_id)
         conn.execute(update_player_id)
 
-update_kicking_foreign_keys()
+
+
+if __name__ == "__main__":
+    update_rushing_foreign_keys()
+    update_receiving_foreign_keys()
+    update_passing_foreign_keys()
+    update_kicking_foreign_keys()
