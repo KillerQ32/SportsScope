@@ -90,6 +90,11 @@ nfl-intelligence-hub/
 
 ---
 
+## Issues we came across
+- Issue: team_name mis-match between tables; Fix: located wrong information and updated with query
+ 
+---
+
 ## Authors Documentation
   
   ### Why we chose this Project?

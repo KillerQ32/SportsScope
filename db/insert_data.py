@@ -1,8 +1,5 @@
 from db.engine import engine
 from sqlalchemy import text
-"""
-File is used for Data Insertion
-"""
 
 def insert_into_players_table(df):
     insert_query = text("""
