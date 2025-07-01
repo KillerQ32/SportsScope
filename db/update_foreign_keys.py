@@ -24,7 +24,6 @@ def update_rushing_foreign_keys():
         conn.execute(update_player_id)
     
 
-
 def update_receiving_foreign_keys():
     update_team_id = text("""
                  UPDATE receiving_stats rs
