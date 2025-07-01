@@ -15,8 +15,8 @@ def get_tds(min_tds: int = Query(0, ge=0), db=Depends(get_db)):
     return [dict(row._mapping) for row in result]
 
 @router.get("/players")
-def get_players(player_id: int, db=Depends(get_db)):
+def get_players(player_name: str, db=Depends(get_db)):
     """ return all rushing players"""
     query = rs.player_rushing_stats()
-    result = db.execute(query, {"player_id": player_id})
+    result = db.execute(query, {"player_name": player_name})
     return [dict(row._mapping) for row in result]
