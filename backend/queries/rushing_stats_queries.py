@@ -6,7 +6,7 @@ def most_tds():
                 join players p 
                 on p.player_id = rs.player_id
                 WHERE rs.rush_tds >= :min_tds
-                order by rs.rush_tds desc""")
+                order by rs.rush_tds desc;""")
     return query
 
 def player_rushing_stats():
@@ -14,5 +14,5 @@ def player_rushing_stats():
                 FROM rushing_stats rs
                 join players p 
                 on p.player_id = rs.player_id
-                WHERE p.player_id = :player_id""")
+                WHERE p.player_id = :player_id;""")
     return query
