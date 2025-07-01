@@ -1,6 +1,8 @@
 from db.engine import engine
 from sqlalchemy import text
-
+"""
+This file is made to assign player_id and team_id to the foreign keys in the stats tables
+"""
 
 def update_rushing_foreign_keys():
     update_team_id = text("""
@@ -66,7 +68,6 @@ def update_passing_foreign_keys():
     with engine.begin() as conn:
         conn.execute(update_team_id)
         conn.execute(update_player_id)
-
 
 
 def update_kicking_foreign_keys():

@@ -3,6 +3,7 @@ from sqlalchemy import text
 
 """
 This file is made for removing any data from the database
+used it to remove temp columns from stats tables
 """
 
 def remove_player_names_rushing_stats():
