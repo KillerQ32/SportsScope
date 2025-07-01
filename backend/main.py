@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
-from api.db.database import get_db
-from api.routes import players
+from backend.db.database import get_db
+from backend.routes import players
 
 
 app = FastAPI()
