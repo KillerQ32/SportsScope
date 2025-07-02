@@ -22,6 +22,5 @@ def player_rushing_stats_year():
                 FROM rushing_stats rs
                 join players p 
                 on p.player_id = rs.player_id
-                WHERE LOWER(p.player_name) = LOWER(:player_name) AND rs.season_year = :season_year
-                WHERE p.player_id = :player_id;""")
+                WHERE LOWER(p.player_name) = LOWER(:player_name) AND rs.season_year = :season_year;""")
     return query
