@@ -5,7 +5,7 @@ def player_passing_stats():
                 FROM passing_stats ps
                 join players p 
                 on p.player_id = ps.player_id
-                WHERE LOWER(p.player_name) = LOWER(:player_name)""")
+                WHERE LOWER(p.player_name) = LOWER(:player_name);""")
     return query
 
 def player_passing_stats_year():
@@ -13,5 +13,5 @@ def player_passing_stats_year():
                 FROM passing_stats ps
                 join players p 
                 on p.player_id = ps.player_id
-                WHERE LOWER(p.player_name) = LOWER(:player_name) AND ps.season_year = :season_year""")
+                WHERE LOWER(p.player_name) = LOWER(:player_name) AND ps.season_year = :season_year;""")
     return query

@@ -7,6 +7,6 @@ def kicking_stats(limit):
                 join players p 
                 on p.player_id = k.player_id
                 order by k.fg_made desc
-                limit {limit}
+                limit {limit};
                  """)
     return query

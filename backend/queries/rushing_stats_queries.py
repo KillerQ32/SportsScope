@@ -14,7 +14,7 @@ def player_rushing_stats():
                 FROM rushing_stats rs
                 join players p 
                 on p.player_id = rs.player_id
-                WHERE LOWER(p.player_name) = LOWER(:player_name)""")
+                WHERE LOWER(p.player_name) = LOWER(:player_name);""")
     return query
 
 def player_rushing_stats_year():
