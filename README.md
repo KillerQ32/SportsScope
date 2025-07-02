@@ -30,6 +30,22 @@ nfl-intelligence-hub/
 - Wrote deduplication logic to ensure no redundant players are inserted across multiple seasons.
 - Aggregated player names/positions into a central `players` table with unique `player_id`s.
 
+
+### API Development
+
+- Developed GET endpoints for all major stat categories (rushing, passing, receiving, kicking) using FastAPI.
+- Incorporated parameter validation using FastAPI's `Path` and `Query`, including range limits and type enforcement.
+- Protected against SQL injection via parameterized queries.
+- Served documentation with Swagger UI for testing and validation.
+- Identified and refactored redundant API logic by modularizing stat route handlers.
+
+### Bug Fixes
+
+- Fixed an issue where only the first SQL update query was executing; resolved with `engine.begin()`.
+- Addressed NULL foreign key values by adjusting insert order and enforcing referential integrity.
+- Cleaned all stat data of inconsistent player and team values.
+- Dropped columns containing personally identifiable information when required.
+
 ### PostgreSQL Integration
 
 - Manual SQL schema: `players`, `teams`, `rushing_stats`, etc.
@@ -77,7 +93,7 @@ nfl-intelligence-hub/
 
 ## To Do
 
-- [ ] Finish inserting all stats types (kicking, returns, passing)
+- [x] Finish inserting all stats types (kicking, returns, passing)
 - [ ] Build FastAPI endpoints
 - [ ] Connect backend to frontend with Axios
 - [ ] Dockerize and test multi-container stack
@@ -85,7 +101,7 @@ nfl-intelligence-hub/
 - [ ] Integrate charts and leaderboard UI
 - [ ] Integrate External APIs
 - [ ] NBA integration
-- [ ] Finish Databse
+- [x] Finish Database
 - [ ] Create Frontend
 
 ---
@@ -94,6 +110,10 @@ nfl-intelligence-hub/
 
 ---
 ## Issues we came across
+- Issue: Swagger showed wrong summary (e.g., GET teams instead of rushing stats); Fix: matched function name under decorator.
+- Issue: player_id updates weren’t executing; Fix: required separate transactions and commits.
+- Issue: uvicorn command not recognized; Fix: added user install path to system and corrected module syntax.
+
 - Issue: team_name mis-match between tables; Fix: located wrong information and updated with query
 - Issue: engine.connect() would only run one query had to swap to engine.begin() for both queries to run
  
@@ -102,11 +122,13 @@ nfl-intelligence-hub/
 ## Authors Documentation
   
   ### Why we chose this Project?
-    N/A
+    We wanted a project that combined both backend engineering and data transformation work, built on real-world, accessible sports data (NFL).
+
   ### Our Approach
-    N/A
+    We started with scraping and cleaning raw stats data, then normalized it into PostgreSQL. We built APIs on top using FastAPI, focused on clarity and type-safe query patterns, and designed a frontend UI to visualize performance.
+
   ### Our Observations
-    N/A
+    Building modular utilities (ETL filters, SQL insert functions) and simplifying logic early on saved time debugging later. Investing in raw SQL knowledge helped us better understand integrity constraints and query performance.
 
 ---
 ## Author
