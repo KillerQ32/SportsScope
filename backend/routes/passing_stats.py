@@ -8,6 +8,7 @@ router = APIRouter()
 
 @router.get("/players")
 def get_players(player_name: str, db=Depends(get_db)):
+    player_name = player_name.lower()
     """ return all passing players"""
     query = ps.player_passing_stats()
     result = db.execute(query, {"player_name": player_name})
@@ -15,6 +16,7 @@ def get_players(player_name: str, db=Depends(get_db)):
 
 @router.get("/players/{season_year}")
 def get_players_by_year(player_name: str, season_year: int = Path(..., ge=2022, le=2024), db=Depends(get_db)):
+    player_name = player_name.lower()
     """ return all passing players for a specific season"""
     query = ps.player_passing_stats_year()
     result = db.execute(query, {"player_name": player_name, "season_year": season_year})
