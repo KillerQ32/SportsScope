@@ -15,6 +15,7 @@ def get_tds(min_tds: int = Query(1, ge=0), db=Depends(get_db)):
 
 @router.get("/players")
 def get_players(player_name: str, db=Depends(get_db)):
+    player_name = player_name.lower()
     """ return all rushing players"""
     query = rs.player_rushing_stats()
     result = db.execute(query, {"player_name": player_name})
@@ -22,6 +23,7 @@ def get_players(player_name: str, db=Depends(get_db)):
 
 @router.get("/players/{season_year}")
 def get_players_by_year(player_name: str, season_year: int = Path(..., ge=2022, le=2024), db=Depends(get_db)):
+    player_name = player_name.lower()
     """ return all rushing players for a specific season"""
     query = rs.player_rushing_stats_year()
     result = db.execute(query, {"player_name": player_name, "season_year": season_year})
