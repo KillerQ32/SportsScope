@@ -13,6 +13,13 @@ def get_tds(min_tds: int = Query(1, ge=0), db=Depends(get_db)):
     result = db.execute(query, {"min_tds": min_tds})
     return [dict(row._mapping) for row in result]
 
+@router.get("/yds")
+def get_yds(min_yards: int = Query(1, ge=0), db=Depends(get_db)):
+    """return top rushing players sorted by yds. defauilt is 1 or more yds"""
+    query = rs.most_yds()
+    result = db.execute(query, {"min_yards": min_yards})
+    return [dict(row._mapping) for row in result]
+
 @router.get("/players")
 def get_players(player_name: str, db=Depends(get_db)):
     player_name = player_name.lower()

@@ -71,7 +71,7 @@ nfl-intelligence-hub/
 
 | Layer         | Stack                           | Why Chosen |
 |---------------|---------------------------------|------------|
-| Frontend      | React + Tailwind                | Fast, interactive UI, good for stat charts |
+| Frontend      | Javascript + Tailwind           | Fast, interactive UI, good for stat charts |
 | Backend       | Python FastAPI                  | Simple, performant REST API |
 | ETL Pipeline  | Pandas                          | Scalable + flexible transformation |
 | DB            | PostgreSQL                      | Strong relational support for stats |

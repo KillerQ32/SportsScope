@@ -24,3 +24,12 @@ def player_rushing_stats_year():
                 on p.player_id = rs.player_id
                 WHERE LOWER(p.player_name) = LOWER(:player_name) AND rs.season_year = :season_year;""")
     return query
+
+def most_yds():
+    query = text("""select p.player_name, rs.rush_attempts, rs.rush_yards, rs.rush_tds, rs.season_year
+                FROM rushing_stats rs
+                join players p 
+                on p.player_id = rs.player_id
+                WHERE rs.rush_yards >= :min_yards
+                order by rs.rush_yards desc;""")
+    return query

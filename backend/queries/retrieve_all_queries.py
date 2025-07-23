@@ -12,7 +12,6 @@ def get_all_stats_by_player_name_query(player_name: str):
                 ps.pass_tds,
                 ps.pass_ints,
                 ps.pass_long,
-                ps.games_played,
                 t.team_name
             FROM passing_stats ps
             JOIN players p ON ps.player_id = p.player_id
