@@ -2,30 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NFL Intelligence Hub</title>
+  <title>SportsScope</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="app.js"></script>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
-
   <!-- Navbar -->
   <nav class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold">🏈 NFL Intelligence Hub</h1>
+    <h1 class="text-2xl font-bold">🏈 SportsScope</h1>
     <div class="space-x-4 text-lg">
       <button onclick="loadHome()">Home</button>
-      <button onclick="loadStats('rushing')">Rushing</button>
-      <button onclick="loadStats('passing')">Passing</button>
-      <button onclick="loadStats('receiving')">Receiving</button>
-      <button onclick="loadStats('kicking')">Kicking</button>
-      <button onclick="loadTeams()">Teams</button>
+      <button onclick="loadGuessGame()">Guess Game</button>
     </div>
   </nav>
 
-  <!-- Content Area -->
-  <main id="content" class="p-6">
-    <!-- dynamic content here -->
+  <!-- Main Content Area -->
+  <main id="content" class="max-w-3xl mx-auto py-10 px-4">
+    <!-- JS will load the landing screen here -->
   </main>
-
 </body>
 </html>

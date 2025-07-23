@@ -1,80 +1,106 @@
 const content = document.getElementById('content');
 
+// ✅ LANDING PAGE
 function loadHome() {
   content.innerHTML = `
-    <h2 class="text-2xl font-bold mb-4">Top Players</h2>
-    <div id="players" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-  `;
+    <section class="text-center max-w-3xl mx-auto py-12 px-4">
+      <h1 class="text-4xl font-bold mb-4 text-indigo-700">Welcome to SportsScope 🏈</h1>
 
-  fetch('http://localhost:8000/players/') // or your actual backend URL
+      <p class="text-gray-700 text-lg mb-6">
+        SportsScope is your interactive dashboard for exploring NFL stats. Whether you're a casual fan or a data nerd,
+        this app helps you dive deep into player performance, team stats, and fun challenges that test your football knowledge.
+      </p>
+
+      <div class="text-left mb-8 space-y-3">
+        <h2 class="text-xl font-semibold text-gray-800">🔍 What can you do here?</h2>
+        <ul class="list-disc list-inside text-gray-600 space-y-1">
+          <li>📊 Track player stats over time and by season</li>
+          <li>🕵️ Play <strong>Guess That Player</strong> — guess the player based on stats, year, and position (no names!)</li>
+          <li>📂 Browse stats by type: Rushing, Passing, Kicking, Receiving</li>
+          <li>🏟️ Explore team performance and rosters</li>
+        </ul>
+      </div>
+
+      <div class="flex justify-center gap-4 flex-wrap mb-12">
+        <button onclick="loadStats('rushing')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-md transition">
+          Browse Rushing Stats
+        </button>
+        <button onclick="loadGuessGame()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-md transition">
+          Try Guess the Player
+        </button>
+        <button onclick="loadTeams()" class="bg-gray-800 hover:bg-gray-900 text-white px-6 py-3 rounded-md transition">
+          View Teams
+        </button>
+      </div>
+
+      <hr class="my-10 border-t">
+
+      <div class="mt-8">
+        <label for="searchInput" class="block text-lg font-semibold mb-2">Search for a specific player:</label>
+        <div class="flex justify-center gap-2">
+          <input id="searchInput" type="text" placeholder="e.g., Jalen Hurts" class="border p-2 rounded w-64" />
+          <button onclick="getAllStatsFromInput()" class="bg-blue-600 text-white px-4 py-2 rounded">
+            Search Stats
+          </button>
+        </div>
+        <div id="statResults" class="mt-6 text-left"></div>
+      </div>
+    </section>
+  `;
+}
+
+// ✅ SEARCH STATS BY NAME
+function getAllStatsFromInput() {
+  const name = document.getElementById('searchInput').value;
+  if (!name) return;
+  getAllStats(name);
+}
+
+function getAllStats(playerName) {
+  fetch(`http://localhost:8000/all/stats?player_name=${playerName}`)
     .then(res => res.json())
-    .then(players => {
-      const playersDiv = document.getElementById('players');
-      players.forEach(p => {
-        playersDiv.innerHTML += `
-          <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-lg font-semibold">${p.player_name}</h3>
-            <p class="text-sm text-gray-600">${p.position}</p>
+    .then(stats => {
+      const results = document.getElementById('statResults');
+      results.innerHTML = '';
+
+      for (const [statType, entries] of Object.entries(stats)) {
+        if (entries.length === 0) continue;
+        results.innerHTML += `
+          <div class="bg-white shadow-md p-4 rounded mb-4">
+            <h2 class="text-xl font-semibold mb-2 capitalize">${statType} Stats</h2>
+            ${entries.map(stat => `
+              <div class="border-t pt-2 text-sm">
+                ${Object.entries(stat).map(([key, val]) => `
+                  <p><strong>${key}:</strong> ${val}</p>
+                `).join('')}
+              </div>
+            `).join('')}
           </div>
         `;
-      });
+      }
+
+      if (results.innerHTML.trim() === '') {
+        results.innerHTML = `<p class="text-red-500 font-semibold">No stats found for "${playerName}"</p>`;
+      }
+    })
+    .catch(err => {
+      console.error("Fetch error:", err);
+      document.getElementById('statResults').innerHTML = `<p class="text-red-500">Error loading stats.</p>`;
     });
 }
 
-
+// ✅ STUB PAGES (PLACEHOLDER FOR NOW)
 function loadStats(type) {
-  content.innerHTML = `
-    <h2 class="text-2xl font-bold capitalize mb-4">${type} Stats</h2>
-    <table class="w-full bg-white shadow rounded">
-      <thead class="bg-gray-200">
-        <tr class="text-left text-sm">
-          <th class="p-2">Player</th>
-          <th class="p-2">Team</th>
-          <th class="p-2">Yards</th>
-          <th class="p-2">TDs</th>
-        </tr>
-      </thead>
-      <tbody id="statBody"></tbody>
-    </table>
-  `;
+  content.innerHTML = `<h2 class="text-2xl font-bold text-center mt-10">${type.toUpperCase()} Stats Page (Coming Soon)</h2>`;
+}
 
-  fetch(`http://localhost:8000/${type}`) // endpoint like /rushing, /passing...
-    .then(res => res.json())
-    .then(stats => {
-      const tbody = document.getElementById('statBody');
-      stats.forEach(s => {
-        tbody.innerHTML += `
-          <tr class="border-t text-sm">
-            <td class="p-2">${s.name}</td>
-            <td class="p-2">${s.team}</td>
-            <td class="p-2">${s.yards}</td>
-            <td class="p-2">${s.tds}</td>
-          </tr>
-        `;
-      });
-    });
+function loadGuessGame() {
+  content.innerHTML = `<h2 class="text-2xl font-bold text-center mt-10">Guess That Player Game (Coming Soon)</h2>`;
 }
 
 function loadTeams() {
-  content.innerHTML = `
-    <h2 class="text-2xl font-bold mb-4">Teams</h2>
-    <div id="teams" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-  `;
-
-  fetch('http://localhost:8000/teams')
-    .then(res => res.json())
-    .then(teams => {
-      const teamsDiv = document.getElementById('teams');
-      teams.forEach(t => {
-        teamsDiv.innerHTML += `
-          <div class="bg-white p-4 rounded shadow text-center">
-            <h3 class="text-lg font-bold">${t.name}</h3>
-            <p>${t.city}</p>
-          </div>
-        `;
-      });
-    });
+  content.innerHTML = `<h2 class="text-2xl font-bold text-center mt-10">Teams Page (Coming Soon)</h2>`;
 }
 
-// Load home on page load
+// ✅ LOAD HOME SCREEN ON FIRST VISIT
 document.addEventListener('DOMContentLoaded', loadHome);
