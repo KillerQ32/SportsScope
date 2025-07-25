@@ -1,9 +1,4 @@
-// ===================== rushing.js =====================
-
-// Load Rushing Stats Page
-function loadStats(type) {
-  if (type !== 'rushing') return;
-
+function loadRushingStats() {
   content.innerHTML = `
     <section class="max-w-4xl mx-auto py-8 px-4 space-y-6">
       <h2 class="text-3xl font-bold text-indigo-700 mb-2">🏈 Search Rushing Stats</h2>
@@ -35,18 +30,17 @@ function loadStats(type) {
 
       <button onclick="runRushingSearch()" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded">Search</button>
 
-      <div id="rushResults" class="pt-8 space-y-4"></div>
+      <div id="rushingResults" class="pt-8 space-y-4"></div>
     </section>
   `;
 }
 
-// Run Rushing Search
 function runRushingSearch() {
   const mode = document.querySelector('input[name="searchMode"]:checked').value;
   const year = document.getElementById('selectedYear').value.trim();
   const filter = document.getElementById('filterType').value;
   const value = document.getElementById('filterValue').value.trim();
-  const results = document.getElementById('rushResults');
+  const results = document.getElementById('rushingResults');
   results.innerHTML = '';
 
   if (mode === 'year' && year === '') {
@@ -57,6 +51,11 @@ function runRushingSearch() {
   if (!value) {
     results.innerHTML = `<p class="text-red-500">Please enter a filter value.</p>`;
     return;
+  }
+
+  if ((filter === 'yards' || filter === 'tds') && isNaN(value)) {
+  results.innerHTML = `<p class="text-red-500">Please enter a number for ${filter === 'yards' ? 'Yards' : 'Touchdowns'}.</p>`;
+  return;
   }
 
   if (mode === 'all' && filter === 'name') {
@@ -72,11 +71,14 @@ function runRushingSearch() {
   }
 
   if (filter === 'name') {
-    fetch(`http://localhost:8000/rushing/players?player_name=${value}`)
-      .then(res => res.json())
-      .then(data => {
-        const filtered = data.filter(p => p.season_year == year);
-        renderRusherResults(filtered);
+    fetch(`http://localhost:8000/rushing/players/${year}?player_name=${value}`)
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then(renderRusherResults)
+      .catch(err => {
+        results.innerHTML = `<p class="text-red-500"> No results found.</p>`;
       });
   } else if (filter === 'yards') {
     fetch(`http://localhost:8000/rushing/yds?min_yards=${value}`)
@@ -95,10 +97,11 @@ function runRushingSearch() {
   }
 }
 
-// Render Results
 function renderRusherResults(data) {
-  const container = document.getElementById("rushResults");
-  if (!data || data.length === 0) {
+  const container = document.getElementById("rushingResults");
+  container.innerHTML = "";
+
+  if (!Array.isArray(data) || data.length === 0) {
     container.innerHTML = `<p class="text-red-500">No results found.</p>`;
     return;
   }
@@ -111,7 +114,7 @@ function renderRusherResults(data) {
         <p><strong>Yards:</strong> ${player.rush_yards}</p>
         <p><strong>TDs:</strong> ${player.rush_tds}</p>
         <p><strong>Attempts:</strong> ${player.rush_attempts}</p>
-        ${player.longest_rush ? `<p><strong>Longest:</strong> ${player.longest_rush}</p>` : ''}
+        <p><strong>Longest rush:</strong> ${player.longest_rush}</p>
       </div>
     `;
   });

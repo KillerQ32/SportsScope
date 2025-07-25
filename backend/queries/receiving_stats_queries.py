@@ -2,7 +2,7 @@ from sqlalchemy import text
 
 
 def most_tds():
-    query = text("""select p.player_name, rs.targets, rs.receptions ,rs.rec_yards, rs.rec_tds, rs.season_year
+    query = text("""select p.player_name, rs.targets, rs.receptions ,rs.rec_yards, rs.rec_tds, rs.rec_long,rs.season_year
                 FROM receiving_stats rs
                 join players p 
                 on p.player_id = rs.player_id
@@ -11,7 +11,7 @@ def most_tds():
     return query
 
 def most_yds():
-    query = text("""select p.player_name, rs.targets, rs.receptions, rs.rec_tds, rs.season_year
+    query = text("""select p.player_name, rs.targets, rs.receptions, rs.rec_yards,rs.rec_tds, rs.rec_long,rs.season_year
                 FROM receiving_stats rs
                 join players p 
                 on p.player_id = rs.player_id

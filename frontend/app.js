@@ -22,7 +22,7 @@ function loadHome() {
       </div>
 
       <div class="flex justify-center gap-4 flex-wrap mb-12">
-        <button onclick="loadStats('rushing')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-md transition">
+        <button onclick="loadRushingStats()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-md transition">
           Browse Rushing Stats
         </button>
         <button onclick="loadGuessGame()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-md transition">
