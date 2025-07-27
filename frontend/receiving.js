@@ -1,5 +1,3 @@
-// ===================== receiving.js =====================
-
 function loadReceivingStats() {
 
   content.innerHTML = `
