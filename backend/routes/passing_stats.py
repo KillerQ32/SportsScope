@@ -6,6 +6,20 @@ import backend.queries.passing_stats_queries as ps
 
 router = APIRouter()
 
+@router.get("/yds")
+def get_players_yds(min_yards: int = Query(0, ge=0), db=Depends(get_db)):
+    """ return all passing yards for a player"""
+    query = ps.player_passing_yds()
+    result = db.execute(query, {"min_pass_yards": min_yards})
+    return [dict(row._mapping) for row in result]
+
+@router.get("/tds")
+def get_players_tds(min_tds: int = Query(0, ge=0), db=Depends(get_db)):
+    """ return all passing touchdowns for a player"""
+    query = ps.player_passing_touchdowns()
+    result = db.execute(query, {"min_pass_tds": min_tds})
+    return [dict(row._mapping) for row in result]
+
 @router.get("/players")
 def get_players(player_name: str, db=Depends(get_db)):
     player_name = player_name.lower()
