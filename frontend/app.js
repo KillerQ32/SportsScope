@@ -22,6 +22,9 @@ function loadHome() {
       </div>
 
       <div class="flex justify-center gap-4 flex-wrap mb-12">
+        <button onclick="loadPlayerTrends()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md transition">
+          Player Trends
+        </button>
         <button onclick="loadRushingStats()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-md transition">
           Browse Rushing Stats
         </button>
@@ -36,11 +39,11 @@ function loadHome() {
       <hr class="my-10 border-t">
 
       <div class="mt-8">
-        <label for="searchInput" class="block text-lg font-semibold mb-2">Search for a specific player:</label>
+        <label for="searchInput" class="block text-lg font-semibold mb-2">Search player trends:</label>
         <div class="flex justify-center gap-2">
-          <input id="searchInput" type="text" placeholder="e.g., Jalen Hurts" class="border p-2 rounded w-64" />
+          <input id="searchInput" type="text" placeholder="e.g., Jalen Hurts" class="border p-2 rounded w-64" onkeydown="if (event.key === 'Enter') getAllStatsFromInput()" />
           <button onclick="getAllStatsFromInput()" class="bg-blue-600 text-white px-4 py-2 rounded">
-            Search Stats
+            View Trends
           </button>
         </div>
         <div id="statResults" class="mt-6 text-left"></div>
@@ -49,43 +52,46 @@ function loadHome() {
   `;
 }
 
+function loadPlayerTrends() {
+  content.innerHTML = `
+    <section class="max-w-6xl mx-auto py-8 px-4 space-y-6">
+      <div class="bg-white shadow p-5 rounded">
+        <h2 class="text-3xl font-bold text-indigo-700 mb-4">Player Trends</h2>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input id="searchInput" type="text" placeholder="e.g., Jalen Hurts" class="border p-3 rounded flex-1" onkeydown="if (event.key === 'Enter') getAllStatsFromInput()" />
+          <button onclick="getAllStatsFromInput()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded">
+            View All Years
+          </button>
+        </div>
+      </div>
+
+      <div id="statResults" class="space-y-6"></div>
+    </section>
+  `;
+}
+
 // homepage search bar functionality
 function getAllStatsFromInput() {
-  const name = document.getElementById('searchInput').value;
+  const name = document.getElementById('searchInput').value.trim();
   if (!name) return;
   getAllStats(name);
 }
 
 function getAllStats(playerName) {
-  fetch(`http://localhost:8000/all/stats?player_name=${playerName}`)
-    .then(res => res.json())
+  const results = document.getElementById('statResults');
+  results.innerHTML = `<p class="text-gray-600">Loading ${playerName}...</p>`;
+
+  fetch(`http://localhost:8000/all/stats?player_name=${encodeURIComponent(playerName)}`)
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
     .then(stats => {
-      const results = document.getElementById('statResults');
-      results.innerHTML = '';
-
-      for (const [statType, entries] of Object.entries(stats)) {
-        if (entries.length === 0) continue;
-        results.innerHTML += `
-          <div class="bg-white shadow-md p-4 rounded mb-4">
-            <h2 class="text-xl font-semibold mb-2 capitalize">${statType} Stats</h2>
-            ${entries.map(stat => `
-              <div class="border-t pt-2 text-sm">
-                ${Object.entries(stat).map(([key, val]) => `
-                  <p><strong>${key}:</strong> ${val}</p>
-                `).join('')}
-              </div>
-            `).join('')}
-          </div>
-        `;
-      }
-
-      if (results.innerHTML.trim() === '') {
-        results.innerHTML = `<p class="text-red-500 font-semibold">No stats found for "${playerName}"</p>`;
-      }
+      renderPlayerStatsDashboard(stats, playerName);
     })
     .catch(err => {
       console.error("Fetch error:", err);
-      document.getElementById('statResults').innerHTML = `<p class="text-red-500">Error loading stats.</p>`;
+      results.innerHTML = `<p class="text-red-500">Error loading stats. Make sure the FastAPI backend is running on port 8000.</p>`;
     });
 }
 

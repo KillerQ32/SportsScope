@@ -5,6 +5,8 @@ def get_all_stats_by_player_name_query(player_name: str):
     return {
         "passing": text("""
             SELECT 
+                p.player_name,
+                p.position,
                 ps.season_year,
                 ps.pass_completed,
                 ps.pass_attempts,
@@ -17,10 +19,13 @@ def get_all_stats_by_player_name_query(player_name: str):
             JOIN players p ON ps.player_id = p.player_id
             JOIN teams t ON ps.team_id = t.team_id
             WHERE LOWER(p.player_name) = :player_name
+            ORDER BY ps.season_year
         """).bindparams(player_name=player_name),
 
         "rushing": text("""
             SELECT 
+                p.player_name,
+                p.position,
                 rs.season_year,
                 rs.rush_attempts,
                 rs.rush_yards,
@@ -31,12 +36,16 @@ def get_all_stats_by_player_name_query(player_name: str):
             JOIN players p ON rs.player_id = p.player_id
             JOIN teams t ON rs.team_id = t.team_id
             WHERE LOWER(p.player_name) = :player_name
+            ORDER BY rs.season_year
         """).bindparams(player_name=player_name),
 
         "receiving": text("""
             SELECT 
+                p.player_name,
+                p.position,
                 rs.season_year,
                 rs.targets,
+                rs.receptions,
                 rs.rec_yards,
                 rs.rec_tds,
                 rs.rec_long,
@@ -45,10 +54,13 @@ def get_all_stats_by_player_name_query(player_name: str):
             JOIN players p ON rs.player_id = p.player_id
             JOIN teams t ON rs.team_id = t.team_id
             WHERE LOWER(p.player_name) = :player_name
+            ORDER BY rs.season_year
         """).bindparams(player_name=player_name),
 
         "kicking": text("""
             SELECT 
+                p.player_name,
+                p.position,
                 ks.season_year,
                 ks.fg_attempts,
                 ks.fg_made,
@@ -60,6 +72,7 @@ def get_all_stats_by_player_name_query(player_name: str):
             JOIN players p ON ks.player_id = p.player_id
             JOIN teams t ON ks.team_id = t.team_id
             WHERE LOWER(p.player_name) = :player_name
+            ORDER BY ks.season_year
         """).bindparams(player_name=player_name),
     }
 
@@ -68,6 +81,8 @@ def get_all_stats_by_player_name_season_year_query(player_name: str, season_year
     return {
         "passing": text("""
             SELECT 
+                p.player_name,
+                p.position,
                 ps.season_year,
                 ps.pass_completed,
                 ps.pass_attempts,
@@ -81,10 +96,13 @@ def get_all_stats_by_player_name_season_year_query(player_name: str, season_year
             JOIN players p ON ps.player_id = p.player_id
             JOIN teams t ON ps.team_id = t.team_id
             WHERE LOWER(p.player_name) = :player_name AND ps.season_year = :season_year
+            ORDER BY ps.season_year
         """).bindparams(player_name=player_name, season_year=season_year),
 
         "rushing": text("""
             SELECT 
+                p.player_name,
+                p.position,
                 rs.season_year,
                 rs.rush_attempts,
                 rs.rush_yards,
@@ -95,12 +113,16 @@ def get_all_stats_by_player_name_season_year_query(player_name: str, season_year
             JOIN players p ON rs.player_id = p.player_id
             JOIN teams t ON rs.team_id = t.team_id
             WHERE LOWER(p.player_name) = :player_name AND rs.season_year = :season_year
+            ORDER BY rs.season_year
         """).bindparams(player_name=player_name, season_year=season_year),
 
         "receiving": text("""
             SELECT 
+                p.player_name,
+                p.position,
                 rs.season_year,
                 rs.targets,
+                rs.receptions,
                 rs.rec_yards,
                 rs.rec_tds,
                 rs.rec_long,
@@ -109,10 +131,13 @@ def get_all_stats_by_player_name_season_year_query(player_name: str, season_year
             JOIN players p ON rs.player_id = p.player_id
             JOIN teams t ON rs.team_id = t.team_id
             WHERE LOWER(p.player_name) = :player_name AND rs.season_year = :season_year
+            ORDER BY rs.season_year
         """).bindparams(player_name=player_name, season_year=season_year),
 
         "kicking": text("""
             SELECT 
+                p.player_name,
+                p.position,
                 ks.season_year,
                 ks.fg_attempts,
                 ks.fg_made,
@@ -124,5 +149,6 @@ def get_all_stats_by_player_name_season_year_query(player_name: str, season_year
             JOIN players p ON ks.player_id = p.player_id
             JOIN teams t ON ks.team_id = t.team_id
             WHERE LOWER(p.player_name) = :player_name AND ks.season_year = :season_year
+            ORDER BY ks.season_year
         """).bindparams(player_name=player_name, season_year=season_year),
     }

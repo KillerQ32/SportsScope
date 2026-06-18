@@ -15,7 +15,7 @@ app.include_router(kicking_stats.router, prefix="/kicking", tags=["kicking"])
 app.include_router(receiving_stats.router, prefix="/receiving", tags=["Receiving"])
 app.include_router(retrieve_all.router, prefix="/all", tags=["all"])
 
-origins = ["http://localhost:5500"]
+origins = ["http://localhost:5500", "http://127.0.0.1:5500"]
 
 app.add_middleware(
     CORSMiddleware,
